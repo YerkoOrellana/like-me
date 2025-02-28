@@ -1,6 +1,5 @@
 const { Pool } = require('pg');
 
-// conexión base de datos
 const pool = new Pool({
     user: 'postgres',
     host: 'localhost',
@@ -9,7 +8,6 @@ const pool = new Pool({
     port: 5432,
 });
 
-// Crear la tabla
 const createTable = async () => {
     try {
         await pool.query(`
@@ -21,22 +19,21 @@ const createTable = async () => {
                 likes INT DEFAULT 0
             );
         `);
-        console.log('Tabla creada o ya existe.');
+        console.log('Tabla creada ya existe');
     } catch (error) {
         console.error('Error al crear la tabla:', error);
     }
 };
 
-// inserta datos en tabla
 const insertPost = async (titulo, img, descripcion) => {
     try {
         await pool.query(`
             INSERT INTO posts (titulo, img, descripcion)
             VALUES ($1, $2, $3);
         `, [titulo, img, descripcion]);
-        console.log('Post insertado.');
+        console.log('Post correcto');
     } catch (error) {
-        console.error('Error al insertar el post:', error);
+        console.error('error al insertar post:', error);
     }
 };
 

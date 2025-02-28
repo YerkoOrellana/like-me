@@ -14,9 +14,6 @@ app.use(express.json());
 
 createTable();
 
-// rutas
-
-//GET
 app.get('/posts', async (req, res) => {
     try {
         const result = await pool.query('SELECT * FROM posts');
@@ -26,18 +23,16 @@ app.get('/posts', async (req, res) => {
     }
 });
 
-//POST
 app.post('/posts', async (req, res) => {
     const { titulo, url, descripcion } = req.body;
     try {
         await insertPost(titulo, url, descripcion);
         res.status(201).json({ message: 'Post creado' });
     } catch (error) {
-        res.status(500).json({ error: 'Error al agregar el post' });
+        res.status(500).json({ error: 'Error al agregar post' });
     }
 });
 
-//PUT con captura de rror
 app.put("/posts/:id", async (req, res) => {
     const { id } = req.params;
     const { titulo, img, descripcion } = req.body;
@@ -51,14 +46,13 @@ app.put("/posts/:id", async (req, res) => {
             return res.status(404).send("Post no encontrado");
         }
 
-        res.status(200).send("Post actualizado con éxito");
+        res.status(200).send("Post actualizado exitosamente");
     } catch (error) {
-        console.error('Error al actualizar el post:', error);
-        res.status(500).send("Error al actualizar el post");
+        console.error('Error al actualizar post:', error);
+        res.status(500).send("Error al actualizar post");
     }
 });
 
-//LIKE OPERATIVO
 app.put("/posts/like/:id", async (req, res) => {
     const { id } = req.params;
 
@@ -77,7 +71,6 @@ app.put("/posts/like/:id", async (req, res) => {
     }
 });
 
-//DELETE 
 app.delete("/posts/:id", async (req, res) => {
     const { id } = req.params;
     
@@ -90,23 +83,18 @@ app.delete("/posts/:id", async (req, res) => {
             return res.status(404).send("Post no encontrado");
         }
 
-        res.status(200).send("Post eliminado con éxito");
+        res.status(200).send("Post eliminado exitosamente");
     } catch (error) {
-        console.error('Error al eliminar el post:', error);
-        res.status(500).send("Error al eliminar el post");
+        console.error('Error al eliminar post:', error);
+        res.status(500).send("Error al eliminar post");
     }
 });
 
-
-
-// archivos html
 app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
-// maneja rutas no definidas por API y servir el index.html del front
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/dist/index.html')); 
 });
-
 
 app.listen(port, () => {
     console.log(`Servidor levantado en http://localhost:${port}`);
